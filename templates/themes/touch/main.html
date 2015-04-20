@@ -1,0 +1,10 @@
+{include file='header-backtomenu.html' title='Overview' exiteffect='pop'}
+{foreach name=fields item=item key=key from=$infoblocks}
+<div class="ui-body ui-body-a ui-corner-all">
+ <h3>{$item.title}</h3>
+ <p>{$item.content}</p>
+</div>
+{foreachelse}
+  <p>{t}No pending tasks as of now{/t}</p>
+{/foreach}
+{include file='footer.html'}

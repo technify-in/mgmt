@@ -1,0 +1,15 @@
+{include file='header-backtomenu.html' title='View Stock'}
+<div class="ui-body ui-body-a ui-corner-all">
+ <h3><img src="{$skinpath}/icons/logo.png" width="32" height="32">{t}Items in Stock{/t}</h3>
+  <p>Total {$count} records
+   <br />{$message}
+  </p>
+</div>
+
+{if $pager}
+<div data-role="collapsible" data-collapsed="false">
+  <h4>{t}Current Stock{/t}</h4>
+  <p>{$pager}</p>
+</div>
+{/if}
+{include file='footer.html'}

@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{$app_default_title} :: {t}Please Authenticate{/t}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="stylesheet" href="{$skinpath}css/jquery.mobile-1.4.0.min.css" />
+<link rel="stylesheet" href="{$skinpath}css/ios_inspired/styles.css" />
+<link rel="stylesheet" href="{$skinpath}css/styles.css" />
+</head>
+
+<body>
+
+<div data-role="page">
+
+  <div data-role="header">
+    <h1><img src='{$skinpath}icons/lock.png' width='16' /> {t}Please Authenticate{/t}</h1>
+  </div>
+
+  <div data-role="content"> 
+    <center>
+    {if $login_message}<p>{$login_message}</p>{/if}
+    <form name="form1" action="login.php?" method="post" data-ajax="false">
+     <table>
+      <tr>
+        <td class="name"><label>{t}User{/t}</label></td>
+        <td>
+          <INPUT type="text" name="username" id="username" value="" size="25" maxlength="32" />
+        </td>
+      </tr>
+      <tr>
+        <td class="name"><label for="password">{t}Password{/t}</label></td>
+        <td><input type="password" name="password" id="password" size="25" maxlength="32"></td>
+      </tr>
+      <tr>
+       <td colspan="2"><input type='submit' name="bname_login" value='{t}Login{/t}' />
+      </td>
+     </tr>
+    </table>
+   </form>
+   </center>
+  </div>
+  <div data-role="footer">
+		<b><center>&copy; 2013-14</center></b>
+	</div>
+
+</div>
+
+<script src="{$skinpath}js/jquery-2.1.0.min.js"></script>
+<script src="{$skinpath}js/jquery.mobile-1.4.0.min.js"></script>
+
+</body>
+</html>
+{include file='analytics.html'}

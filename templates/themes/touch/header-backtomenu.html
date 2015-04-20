@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{$app_default_title} :: {$title}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="stylesheet" href="{$skinpath}css/jquery.mobile-1.4.0.min.css" />
+<link rel="stylesheet" href="{$skinpath}css/ios_inspired/styles.css" />
+<link rel="stylesheet" type="text/css" href="{$skinpath}css/jquery.datetimepicker.css"/ >
+<link rel="stylesheet" href="{$skinpath}css/styles.css" />
+<script src="{$skinpath}js/jquery-2.1.0.min.js"></script>
+<script src="{$skinpath}js/jquery.mobile-1.4.0.min.js"></script>
+<script src="{$skinpath}js/jquery.datetimepicker.js"></script>
+</head>
+<body>
+<div data-role="page">
+<div data-role="header">
+  {if $backtourl}
+  <a href="{$backtourl}" data-icon="back" data-direction="reverse" {if $exiteffect}data-transition="{$exiteffect}"{else}data-transition="slide"{/if}>{t}Back{/t}</a>
+  {else}
+  <a href="menu.php" data-icon="back" data-direction="reverse" {if $exiteffect}data-transition="{$exiteffect}"{else}data-transition="slide"{/if}>{t}Back{/t}</a>
+  {/if}
+	<h1>{$title}</h1>
+</div><!-- /header -->
+<div data-role="content">

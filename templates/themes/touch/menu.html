@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>{$app_default_title} : {t}Welcome{/t}</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<link rel="stylesheet" href="{$skinpath}css/jquery.mobile-1.4.0.min.css" />
+<link rel="stylesheet" href="{$skinpath}css/ios_inspired/styles.css" />
+<link rel="stylesheet" href="{$skinpath}css/styles.css" />
+<link rel="stylesheet" type="text/css" href="{$skinpath}css/jquery.datetimepicker.css"/ >
+<script src="{$skinpath}js/jquery-2.1.0.min.js"></script>
+<script src="{$skinpath}js/jquery.mobile-1.4.0.min.js"></script>
+<script src="{$skinpath}js/jquery.datetimepicker.js"></script>
+</head>
+<body>
+
+<div data-role="page" id='mainmenu'>
+  <div data-role="header">
+    <h1>{t}Welcome{/t} {$username}</h1>
+  </div>
+
+  <div data-role="content">
+    <ul data-role="listview" data-filter="true">
+     <li>
+      <a href='main.php' data-transition="pop">
+	     <img src='{$skinpath}icons/home.png'/>
+	     <h4>{t}Overview{/t}</h4>
+      </a>
+     </li>
+    {foreach name=fields item=fielditems key=key from=$menufields}
+      {foreach name=items item=menuitem from=$fielditems}
+       {if $menuitem.submenu} {* display more than one menu *}
+        {foreach name=items2 item=submenu from=$menuitem.submenu}
+     <li>
+      <a href='module.php?to={$submenu.url}&adodb_next_page=1' data-transition="slide">
+		   {if $submenu.icon}<img src='{$skinpath}icons/{$submenu.icon}'/>{/if}
+		   <h4>{$submenu.name}</h4>
+      </a>
+     </li>
+        {/foreach}
+       {else}
+     <li>
+      <a href='module.php?to={$menuitem.url}&adodb_next_page=1' data-transition="slide">
+		   {if $menuitem.icon}<img src='{$skinpath}icons/{$menuitem.icon}'/>{/if}
+		   <h4>{$menuitem.name}</h4>
+      </a>
+     </li>
+       {/if}
+      {/foreach}
+     {/foreach}
+     <li>
+      <a href='mydetails.php' data-transition="slide">
+	     <img src='{$skinpath}icons/userinfo.png'/>
+	     <h4>{t}Settings{/t}</h4>
+      </a>
+     </li>
+     <li>
+      <a href='logout.php'>
+		   <img src='{$skinpath}icons/door.png'/>
+		   <h4>{t}Exit{/t}</h4>
+      </a>
+     </li>
+     <li>
+      <a href='#helppopup' data-rel="dialog" data-transition="pop">
+		   <img src='{$skinpath}icons/help.png'/>
+		   <h4>{t}Help{/t}</h4>
+      </a>
+     </li>
+	</ul>
+  </div>
+</div>
+
+<div data-role="page" id="helppopup">
+	<div data-role="header">
+	 <h1>{t}Need Help{/t}</h1>
+	</div>
+	<div data-role="content">	
+	  <h2>{t}Contact the Following{/t}</h2>
+    <center>
+	    <p><img src='{$skinpath}icons/help.png' width='50%'/></p>
+      <p>Pray to your GOD.</p>
+	    <p><a href="#mainmenu" data-rel="back" data-role="button">Close</a></p>
+    </center>
+	</div>
+  <div data-role="footer">
+		<h4>Thank You!</h4>
+	</div>
+ </div>
+</div>
+</body>
+</html>
+{include file='analytics.html'}

@@ -1,0 +1,128 @@
+<h1>{$form.title}</h1>
+<form method='{$form.method}' id='{$form.name}' name='{$form.name}' action='{$form.action}' onsubmit="return checkform_{$form.name}(document.forms['{$form.name}']);"  {$form.extradata}>
+<!--Fields in this form-->
+<div class="ui-field-contain">
+    <p align='right'><small>Fields marked with a star are required.</small></p>
+</div>
+{assign var="ccount" value="0"}
+{foreach name=fields item=field from=$form.fields}
+    {if $field.type =='hidden'}
+      <input type='hidden' name='{$field.name}' id='{$field.name}' value='{$field.value}' />
+    {elseif $field.type == 'html'}
+      <div class="ui-field-contain">
+        {$field.html}
+      </div>
+    {elseif $field.type == 'text'}
+      {* Only increment if visible element *}
+      {math equation="$ccount+1" assign="ccount"}
+    <div class="ui-field-contain">
+      <label for="{$field.name}">{$ccount}.&nbsp;{$field.label}</label>
+      <div id="{$field.name}_" class="ui-helper-clearfix">
+        <input data-clear-btn="true" {if $field.name}value='{$field.value}'{/if} name='{$field.name}' id='{$field.name}' {if $field.value}value="{$field.value}"{/if} {if $field.size}size='{$field.size}'{/if} {if $field.maxlength}maxlength="{$field.maxlength}"{/if} {if $field.tooltip}title="{$field.tooltip}"{/if} {if $field.inputtype eq 'date'}type="date"{else}type="text"{/if}/> {if $field.required}*{/if}
+      </div>
+      {if $field.inputtype eq 'number'}
+            <script>{literal}
+                  $('#{/literal}{$field.name}{literal}').keypress(function(event) {
+                    if (event.charCode && (event.charCode < 48 || event.charCode > 57) && event.charCode != 46 && event.charCode != 45){ event.preventDefault();}
+                  });
+            {/literal}</script>
+      {elseif $field.inputtype eq 'date'}
+            <script>{literal}
+              $(document).ready(function(){$('#{/literal}{$field.name}{literal}').datetimepicker({timepicker:false,
+ format:'Y-m-d'})});
+            {/literal}</script>
+      {elseif $field.inputtype eq 'datetime'}
+            <script>{literal}
+              $(document).ready(function(){$('#{/literal}{$field.name}{literal}').datetimepicker({timepicker:true,
+ format:'Y-m-d H:i:s'})});
+            {/literal}</script>
+       {elseif $field.inputtype eq 'autocomplete' and $field.source}
+          <script>{literal}
+                    $(function() {
+                            $( "#{/literal}{$field.name}{literal}" ).autocomplete({
+                                source: "{/literal}{$field.source}{literal}",
+                                minLength: 2,
+//                                select: function( event, ui ) {
+//                                }
+                            });
+                });
+          {/literal}</script>
+       {/if}
+     </div>
+    {elseif $field.type == 'textarea' }
+      {* Only increment if visible element *}
+      {math equation="$ccount+1" assign="ccount"}
+    <div class="ui-field-contain">
+      <label for="{$field.name}">{$ccount}.&nbsp;{$field.label}</label>
+      <textarea name='{$field.name}' id='{$field.name}' {if $field.rows}rows='{$field.rows}'{/if} {if $field.cols}cols='{$field.cols}'{/if} {if $field.tooltip}title="{$field.tooltip}"{/if}  >{if $field.value}{$field.value}{/if}</textarea>{if $field.required}*{/if}
+    </div>
+    {elseif $field.type == 'select' }
+      {* Only increment if visible element *}
+      {math equation="$ccount+1" assign="ccount"}
+    <div class="ui-field-contain">
+      <label for="{$field.name}">{$ccount}.&nbsp;{$field.label}</label>
+      <select name="{$field.name}" id='{$field.name}' {if $field.tooltip}title="{$field.tooltip}"{/if} >
+          {if $field.noselect}
+            <option value='{$field.noselect.value}'>{$field.noselect.option}</option>
+          {/if}
+          {html_options options=$field.value selected=$field.selected}
+      </select>{if $field.required}*{/if}
+    </div>
+    {elseif $field.type == 'displayonly'}
+      {math equation="$ccount+1" assign="ccount"}
+    <div class="ui-field-contain">
+      <label for="{$field.name}">{$ccount}.&nbsp;{$field.label}</label>
+      <div id="{$field.name}" {if $field.tooltip}title="{$field.tooltip}"{/if} >
+      {$field.value}
+      </div>
+    </div>
+    {elseif $field.type == 'label'}
+    <div class="ui-field-contain">
+     {$field.label}
+    </div>
+    {/if}
+{/foreach}
+<fieldset class="ui-grid-a">
+  {if $form.savebuttonlabel}
+    <div class="ui-block-a"><input value="{$form.savebuttonlabel}" data-theme="d" type="submit"></div>
+  {/if}
+  {if $form.resetbuttonlabel}
+    <div class="ui-block-b"><input value="{$form.resetbuttonlabel}" data-theme="e" type="reset"></div>
+  {/if}
+</fieldset>
+{* check if this form has been submitted, check for op=$form.name_submitted *}
+<input type='hidden' name='op' value='{$form.name}_submitted' />
+</form>
+<SCRIPT language='javascript'>
+//<!--
+function checkform_{$form.name}(f)
+{ldelim}
+  var message = "";
+{foreach name=fields item=field from=$form.fields}
+ {if $field.required && ($field.type == 'text' ||  $field.type == 'textarea')}
+  if (f.{$field.name}.value.length == 0)
+  {ldelim}
+    message = message + " * {$field.label}\n";
+  {rdelim}
+ {/if}
+ {if $field.required && ($field.type == 'select')}
+  if (f.{$field.name}.value == 0)
+  {ldelim}
+    message = message + " * Please make a selection for  {$field.label}\n";
+  {rdelim}
+ {/if}
+{/foreach}
+
+  if ( message.length > 0 )
+  {ldelim}
+    message = "Please fill the following information\n" + message;
+    alert( message );
+    return false;
+  {rdelim}
+  else
+  {ldelim}
+    return true;
+  {rdelim}
+{rdelim}
+// -->
+</SCRIPT>

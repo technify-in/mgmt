@@ -1,0 +1,41 @@
+
+.PagerTable {
+    font-family:"Lucida Sans Unicode", Sans-Serif;
+    font-size:12px;
+    background:#fff;
+    width:500px;
+    border-collapse:collapse;
+    text-align:left;
+}
+.PagerTable tr:nth-child(odd){ background-color:#aad4ff; }
+.PagerTable tr:nth-child(even){ background-color:#ffffff; }
+
+.PagerTable th {
+    font-size:12px;
+    color: #DD2262;
+    border-bottom: 2px solid #5522ff;
+    background-color:#ffffff;
+    padding:10px 8px;
+}
+.PagerTable td {
+    color:#000;
+    padding:16px 10px 0;
+}
+.PagerTable tbody tr:hover td {
+    color:#009;
+}
+
+.employee-pic {
+	float: left;
+	padding-right: 10px;
+	padding-bottom: 16px;
+}
+
+.employee-details h3, .employee-details p {
+	margin-top: 8px;
+	margin-bottom: 4px;
+}
+
+.action-list {
+	clear: both;
+}

@@ -1,0 +1,150 @@
+<h1>{$form.title}</h1>
+<!--Fields in this form-->
+<form method='{$form.method}' id='{$form.name}' name='{$form.name}' action='{$form.action}' onsubmit="return checkform_{$form.name}(document.forms['{$form.name}']);"  {$form.extradata}>
+<table width='100%'>
+  <tr>
+    <td>&nbsp;</td>
+    <td colspan='{$form.fields|@count}' align='right'><small class='required_autoform'>Fields in yellow are required.</small></td>
+  </tr>
+<!-- set labels -->
+<!--row headings-->
+<tr>
+<th>Enabled</th> 
+{foreach name=fields item=field from=$form.fields}
+    <!--All except hidden-->
+    {if $field.type != 'hidden'}
+      <th><center><b>{$field.label}</b></center></th>
+    {/if}
+{/foreach}
+</tr>
+{assign var="ccount" value="0"}
+{foreach name=rows key=key item=row_label from=$form.row_labels}
+<tr>
+<td><b>{$row_label}</b>
+                <input type='checkbox' name="{$form.name}_autoform_ch{$key}" id="{$form.name}_autoform_ch{$key}" onclick='check{$form.name}_autoform_ch{$key}()' value='1' title='Uncheck to disable this row' checked>
+<SCRIPT language='javascript'>
+<!--
+function check{$form.name}_autoform_ch{$key}()
+{ldelim}
+  {foreach name=fields item=field from=$form.fields}
+  {if $field.type <> 'hidden'}
+    document.{$form.name}.{$field.name}{$key}.disabled=!document.{$form.name}.{$field.name}{$key}.disabled;
+  {/if}
+  {/foreach}
+{rdelim}
+// -->
+</SCRIPT>
+</td>
+{foreach name=fields item=field from=$form.fields}
+    {if $field.type =='hidden'}
+        <input type='hidden' name='{$field.name}{$key}' id='{$field.name}{$key}' value='{$field.value}' />
+   {elseif $field.type == 'label'}
+      <th><center><b>{$field.label}</b></center></th>
+   {else}
+      <td>
+      {if $field.type == 'text'}
+        {* Only increment if visible element *}
+        {math equation="$ccount+1" assign="ccount"}
+          <div id="{$field.name}{$key}_" class="ui-helper-clearfix">
+              <input type='text' name='{$field.name}{$key}' id='{$field.name}{$key}' {if $field.value}value="{$field.value}"{/if} {if $field.size}size='{$field.size}'{/if} {if $field.maxlength}maxlength="{$field.maxlength}"{/if}  {if $field.inputtype eq 'date'}readonly{/if}{if $field.required} class='required_autoform'{/if} {if $field.tooltip}title="{$field.tooltip}"{/if} />
+          </div>
+        {if $field.inputtype eq 'number'}
+              <script>{literal}
+                    $('#{/literal}{$field.name}{$key}{literal}').keypress(function(event) {
+                      if (event.charCode && (event.charCode < 48 || event.charCode > 57) && event.charCode != 46 && event.charCode != 45){ event.preventDefault();}
+                    });
+              {/literal}</script>
+        {elseif $field.inputtype eq 'date'}
+              <script>{literal}
+                    $(document).ready(function(){$('#{/literal}{$field.name}{$key}{literal}').datepicker({{/literal}{if $field.yearrange} yearRange:'{$field.yearrange}',{/if} changeMonth: true, changeYear: true,{if $field.mindate}minDate: '{$field.mindate}',{/if}{if $field.maxdate}maxDate: '{$field.maxdate}',{/if}dateFormat: {if $field.dateformat}'{$field.dateformat}'{else}'yy-mm-dd'{/if}{literal}})});
+              {/literal}</script>
+        {elseif $field.inputtype eq 'datetime'}
+              <script>{literal}
+                    $(document).ready(function(){$('#{/literal}{$field.name}{$key}{literal}').datetimepicker({{/literal}{if $field.yearrange} yearRange:'{$field.yearrange}',{/if} changeMonth: true, timeFormat: 'hh:mm:ss', changeYear: true,{if $field.mindate}minDate: '{$field.mindate}',{/if}{if $field.maxdate}maxDate: '{$field.maxdate}',{/if}dateFormat: {if $field.dateformat}'{$field.dateformat}'{else}'yy-mm-dd'{/if}{literal}})});
+              {/literal}</script>
+        {elseif $field.inputtype eq 'autocomplete' and $field.source}
+            <script>{literal}
+                      $(function() {
+                              $( "#{/literal}{$field.name}{$key}{literal}" ).autocomplete({
+                                  source: "{/literal}{$field.source}{literal}",
+                                  minLength: 2
+                              });
+                  });
+            {/literal}</script>
+        {/if}
+      {elseif $field.type == 'textarea' }
+        {* Only increment if visible element *}
+        {math equation="$ccount+1" assign="ccount"}
+          <textarea name='{$field.name}{$key}' id='{$field.name}{$key}' {if $field.rows}rows='{$field.rows}'{/if} {if $field.cols}cols='{$field.cols}'{/if}{if $field.required} class='required_autoform' {/if} {if $field.tooltip}title="{$field.tooltip}"{/if} >{if $field.value}value="{$field.value}"{/if}</textarea>
+      {elseif $field.type == 'displayonly' }
+        {* Only increment if visible element *}
+        {math equation="$ccount+1" assign="ccount"}
+          {$field.value}
+      {elseif $field.type == 'select' }
+      {* Only increment if visible element *}
+        {math equation="$ccount+1" assign="ccount"}
+            <select name="{$field.name}{$key}" id='{$field.name}{$key}'{if $field.required} class='required_autoform' {/if} {if $field.tooltip}title="{$field.tooltip}"{/if} >
+              {if $field.noselect}
+                <option value='{$field.noselect.value}'>{$field.noselect.option}</option>
+              {/if}
+              {html_options options=$field.value selected=$field.selected}
+            </select>
+        {/if}
+      </td>
+    {/if}
+{/foreach}
+</tr>
+{/foreach}
+  <tr>
+    <td>&nbsp;</td>
+    <td colspan="{$form.fields|@count}" align="center">
+        {if $form.savebuttonlabel}
+          <input type='submit' value='{$form.savebuttonlabel}' />
+        {/if}
+        {if $form.resetbuttonlabel}
+          <input type='reset' value='{$form.resetbuttonlabel}' />
+        {/if}
+    </td>
+  </tr>
+</table>
+{* check if this form has been submitted, check for op=$form.name_submitted *}
+<input type='hidden' name='op' value='{$form.name}_submitted' />
+</form>
+<SCRIPT language='javascript'>
+<!--
+function checkform_{$form.name}(f)
+{ldelim}
+  var message = "";
+{foreach name=rows key=key item=row_labels from=$form.row_labels}
+  if(f.{$form.name}_autoform_ch{$key}.checked == 1)
+  {ldelim}
+    {foreach name=fields item=field from=$form.fields}
+    {if $field.required && ($field.type == 'text' ||  $field.type == 'textarea')}
+      if (f.{$field.name}{$key}.value.length == 0)
+      {ldelim}
+        message = message + " * {$row_labels} / {$field.label}\n";
+      {rdelim}
+    {/if}
+    {if $field.required && ($field.type == 'select')}
+      if (f.{$field.name}{$key}.value == 0)
+      {ldelim}
+        message = message + " * Please make a selection for {$row_labels} / {$field.label}\n";
+      {rdelim}
+    {/if}
+    {/foreach}
+  {rdelim}
+{/foreach}
+
+  if ( message.length > 0 ) 
+  {ldelim}
+    message = "Please fill the following information\n" + message;
+    alert( message );
+    return false;
+  {rdelim}
+  else
+  {ldelim}
+    return true;
+  {rdelim}
+{rdelim}
+// -->
+</SCRIPT>
