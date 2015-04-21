@@ -5,7 +5,7 @@
  */
 /** If web app is installed in a sub directory
  */
-$config['app_subdir'] = '~aps/bankim';
+//$config['app_subdir'] = '~aps/bankim';
 
 
 /** Default Local Settings
@@ -18,7 +18,7 @@ $config['lang']     = "en_US"; //pa_IN.utf8
     mysql://username:password@localhost/database
  */
 
-$config['dsn'] = 'mysql://bankim:bankim@localhost/bankim';
+$config['dsn'] = 'mysql://mgmt:store123@localhost/mgmt';
 
 /** Session name: Set it to something unique
  */
